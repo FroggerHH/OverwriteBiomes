@@ -1,19 +1,27 @@
-﻿namespace OverwriteBiomes.Patch;
+﻿using System.Diagnostics;
+
+// The switch expression does not handle all possible values of its input type (it is not exhaustive).
+#pragma warning disable CS8509
+
+namespace OverwriteBiomes.Patch;
 
 [HarmonyWrapSafe]
 internal static class OverwriteBiomes
 {
     private static bool _isInitializingStartTemple;
 
-    [HarmonyPatch(typeof(WorldGenerator), nameof(WorldGenerator.GetBiome), typeof(Vector3)), HarmonyPostfix]
+    [HarmonyPatch(typeof(WorldGenerator), nameof(WorldGenerator.GetBiome), typeof(Vector3))]
+    [HarmonyPostfix]
     public static void Patch1(WorldGenerator __instance, ref Biome __result, Vector3 point) =>
         OverwriteBiome(__instance, ref __result);
 
-    [HarmonyPatch(typeof(WorldGenerator), nameof(WorldGenerator.GetBiome), typeof(float), typeof(float)), HarmonyPostfix]
+    [HarmonyPatch(typeof(WorldGenerator), nameof(WorldGenerator.GetBiome), typeof(float), typeof(float), typeof(float), typeof(bool))]
+    [HarmonyPostfix]
     public static void Patch2(WorldGenerator __instance, ref Biome __result) =>
         OverwriteBiome(__instance, ref __result);
 
-    [HarmonyPatch(typeof(ZoneSystem), nameof(ZoneSystem.GenerateLocations), typeof(ZoneLocation)), HarmonyPrefix]
+    [HarmonyPatch(typeof(ZoneSystem), nameof(ZoneSystem.GenerateLocationsTimeSliced), typeof(ZoneLocation), typeof(Stopwatch), typeof(ZPackage))]
+    [HarmonyPrefix]
     public static void Patch3(ZoneSystem __instance, ZoneLocation location) =>
         _isInitializingStartTemple = location.m_prefabName == "StartTemple";
 
