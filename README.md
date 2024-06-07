@@ -5,4 +5,4 @@ It provides config to every biome.
 
 ## Contact
 - Discord: `justafrogger`
-- Or create an issue [here](https://github.com/justafrogger/OverwriteBiomes/issues)
+- Or create an issue [here](https://github.com/FroggerHH/OverwriteBiomes/issues/new)
